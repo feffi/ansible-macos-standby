@@ -1,0 +1,16 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  vars:
+    DEBUG: true
+    macos_standby:
+      standby_delay: 86400
+      sleep_delay: "Never"
+      hibernate_mode: 0
+      remove_sleepimage: false
+      bezel_dim: true
+      bezel_dim_delay: 300
+      terminate_inactive: false
+
+  roles:
+    - { role: ansible-macos-standby }

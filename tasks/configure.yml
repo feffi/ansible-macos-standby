@@ -1,0 +1,45 @@
+---
+- name: "Set standby delay to {{ macos_standby.standby_delay }} seconds."
+  become: true
+  command: "pmset -a standbydelay {{ macos_standby.standby_delay }}"
+  when: not macos_standby.standby_delay
+
+- name: "Set deep sleep delay to {{ macos_standby.sleep_delay }}"
+  become: true
+  command: "systemsetup -setcomputersleep {{ macos_standby.sleep_delay }} > /dev/null"
+  when: macos_standby.sleep_delay
+
+- name: "Set hibernation mode to {{ macos_standby.hibernate_mode }}"
+  become: true
+  command: "pmset -a hibernatemode {{ macos_standby.hibernate_mode }}"
+  when: macos_standby.hibernate_mode in [0, 3, 25]
+
+- name: "Unsupported hibernation mode {{ macos_standby.hibernate_mode }}, must be 0, 3, 25"
+  debug:
+    msg: "Unsupported hibernation mode {{ macos_standby.hibernate_mode }}, must be 0, 3, 25"
+  when: macos_standby.hibernate_mode not in [0, 3, 25]
+
+- name: "Remove the sleep image file to save disk space"
+  become: true
+  command: "rm /private/var/vm/sleepimage"
+  when: macos_standby.remove_sleepimage
+
+- name: "Create a zero-byte file instead..."
+  become: true
+  command: "touch /private/var/vm/sleepimage"
+  when: macos_standby.remove_sleepimage
+
+- name: "...and make sure it can't be rewritten"
+  become: true
+  command: "chflags uchg /private/var/vm/sleepimage"
+  when: macos_standby.remove_sleepimage
+
+- name: Set macOS defaults
+  include_role:
+    name: feffi.macos-defaults
+  vars:
+    macos_defaults:
+      defaults:
+        - { domain: "com.apple.BezelServices", key: "kDim", type: "boolean", value: "{{ macos_standby.bezel_dim }}", description: "Automatically illuminate built-in MacBook keyboard in low light" }
+        - { domain: "com.apple.BezelServices", key: "kDimTime", type: "integer", value: "{{ macos_standby.bezel_dim_delay }}", description: "Turn off keyboard illumination when computer is not used for 5 minutes" }
+        - { domain: "NSGlobalDomain", key: "NSDisableAutomaticTermination", type: "boolean", value: "{{ not macos_standby.terminate_inactive }}", description: "DISALLOW automatic termination of inactive apps" }
