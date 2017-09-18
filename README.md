@@ -57,6 +57,20 @@ macos_standby:
   # Automatic termination of inactive apps
   terminate_inactive: false
 
+  # Set display sleep time delay in minutes
+  sleep_display: "Never"
+
+  # Set computer sleep time delay in minutes
+  sleep_computer: "Never"
+
+  # Set harddisk sleep time delay in minutes
+  sleep_harddisk: "Never"
+
+  # Set wake on modem to either <on> or <off>
+  wake_on_modem: "on"
+
+  # Set wake on network access to either <on> or <off>
+  wake_on_lan: "on"
 ```
 
 ## Dependencies
@@ -75,7 +89,11 @@ None.
           bezel_dim: true
           bezel_dim_delay: 300
           terminate_inactive: false
-
+          sleep_display: "Never"
+          sleep_computer: "Never"
+          sleep_harddisk: "Never"
+          wake_on_modem: "on"
+          wake_on_lan: "on"
       roles:
         - { role: feffi.macos-standby }
 ```
@@ -92,6 +110,11 @@ Or with local parameters:
               remove_sleepimage: false,
               bezel_dim: true,
               bezel_dim_delay: 300,
-              terminate_inactive: false
+              terminate_inactive: false,
+              sleep_display: "Never",
+              sleep_computer: "Never",
+              sleep_harddisk: "Never",
+              wake_on_modem: "on",
+              wake_on_lan: "on"
           }
 ```

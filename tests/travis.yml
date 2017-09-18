@@ -11,6 +11,10 @@
       bezel_dim: true
       bezel_dim_delay: 300
       terminate_inactive: false
-
+      sleep_display: "Never"
+      sleep_computer: "Never"
+      sleep_harddisk: "Never"
+      wake_on_modem: "on"
+      wake_on_lan: "on"
   roles:
     - { role: ansible-macos-standby }

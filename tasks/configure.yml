@@ -34,6 +34,28 @@
   command: "chflags uchg /private/var/vm/sleepimage"
   when: macos_standby.remove_sleepimage
 
+- name: "Set display sleep time to {{ macos_standby.sleep_display }}"
+  become: yes
+  command: "systemsetup -setdisplaysleep {{ macos_standby.sleep_display }}"
+
+- name: "Set computer sleep time to {{ macos_standby.sleep_computer }}"
+  become: yes
+  command: "systemsetup -setcomputersleep {{ macos_standby.sleep_computer }}"
+
+- name: "Set harddisk sleep time to {{ macos_standby.sleep_harddisk }}"
+  become: yes
+  command: "systemsetup -setharddisksleep {{ macos_standby.sleep_harddisk }}"
+
+- name: "Set wake-on-modem"
+  become: yes
+  command: "systemsetup -setwakeonmodem {{ macos_standby.wake_on_modem }}"
+  when: macos_standby.wake_on_modem in [ "on", "off" ]
+
+- name: "Set wake-on-lan"
+  become: yes
+  command: "systemsetup --setwakeonnetworkaccess {{ macos_standby.wake_on_lan }}"
+  when: macos_standby.wake_on_lan in [ "on", "off" ]
+
 - name: Set macOS defaults
   include_role:
     name: feffi.macos-defaults
