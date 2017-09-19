@@ -50,6 +50,7 @@
   become: yes
   command: "systemsetup -setwakeonmodem {{ macos_standby.wake_on_modem }}"
   when: macos_standby.wake_on_modem in [ "on", "off" ]
+  ignore_errors: true
 
 - name: "Set wake-on-lan"
   become: yes
