@@ -11,8 +11,12 @@ galaxy_info:
   galaxy_tags:
     - system
     - osx
+    - macos
     - config
     - editor
+    - standby
+    - hibernate
+    - sleep
 dependencies:
   - { role: feffi.macos-defaults,
       macos_defaults: {
