@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Kevin Wennemuth
-  description: Ansible role to manage a sublime installation on macOS
+  description: Ansible role to manage macOS standby, hibernate and sleep settings.
   license: MIT
   min_ansible_version: 2.3
   platforms:
