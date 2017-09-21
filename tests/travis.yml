@@ -14,7 +14,6 @@
       sleep_display: "Never"
       sleep_computer: "Never"
       sleep_harddisk: "Never"
-      wake_on_modem: "on"
       wake_on_lan: "on"
       powerbutton_sleep: false
   roles:

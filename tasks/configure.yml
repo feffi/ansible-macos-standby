@@ -46,12 +46,6 @@
   become: yes
   command: "systemsetup -setharddisksleep {{ macos_standby.sleep_harddisk }}"
 
-- name: "Set wake-on-modem"
-  become: yes
-  command: "systemsetup -setwakeonmodem {{ macos_standby.wake_on_modem }}"
-  when: macos_standby.wake_on_modem in [ "on", "off" ]
-  ignore_errors: true
-
 - name: "Set wake-on-lan"
   become: yes
   command: "systemsetup --setwakeonnetworkaccess {{ macos_standby.wake_on_lan }}"

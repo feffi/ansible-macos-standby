@@ -66,9 +66,6 @@ macos_standby:
   # Set harddisk sleep time delay in minutes
   sleep_harddisk: "Never"
 
-  # Set wake on modem to either <on> or <off>
-  wake_on_modem: "on"
-
   # Set wake on network access to either <on> or <off>
   wake_on_lan: "on"
 
@@ -95,7 +92,6 @@ None.
           sleep_display: "Never"
           sleep_computer: "Never"
           sleep_harddisk: "Never"
-          wake_on_modem: "on"
           wake_on_lan: "on"
           powerbutton_sleep: false
       roles:
@@ -118,7 +114,6 @@ Or with local parameters:
               sleep_display: "Never",
               sleep_computer: "Never",
               sleep_harddisk: "Never",
-              wake_on_modem: "on",
               wake_on_lan: "on",
               powerbutton_sleep: false
           }
