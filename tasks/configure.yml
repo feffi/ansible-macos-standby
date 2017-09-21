@@ -66,4 +66,4 @@
         - { domain: "com.apple.BezelServices", key: "kDim", type: "boolean", value: "{{ macos_standby.bezel_dim }}", description: "Automatically illuminate built-in MacBook keyboard in low light" }
         - { domain: "com.apple.BezelServices", key: "kDimTime", type: "integer", value: "{{ macos_standby.bezel_dim_delay }}", description: "Turn off keyboard illumination when computer is not used for 5 minutes" }
         - { domain: "NSGlobalDomain", key: "NSDisableAutomaticTermination", type: "boolean", value: "{{ not macos_standby.terminate_inactive }}", description: "DISALLOW automatic termination of inactive apps" }
-        - { domain: "/Library/Preferences/com.apple.loginwindow", key: "PowerButtonSleepsSystem", type: "boolean", value: "{{ not macos_standby.powerbutton_sleep }}", description: "Sleep on pressing the power button, direct sleep = true, show dialog = false" }
+        - { domain: "/Library/Preferences/com.apple.loginwindow", key: "PowerButtonSleepsSystem", type: "boolean", value: "{{ macos_standby.powerbutton_sleep }}", description: "Sleep on pressing the power button, direct sleep = true, show dialog = false" }
