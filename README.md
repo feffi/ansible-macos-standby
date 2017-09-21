@@ -71,6 +71,9 @@ macos_standby:
 
   # Set wake on network access to either <on> or <off>
   wake_on_lan: "on"
+
+  # Sleep on pressing the power button, direct sleep = true, show dialog = false
+  powerbutton_sleep: false
 ```
 
 ## Dependencies
@@ -94,6 +97,7 @@ None.
           sleep_harddisk: "Never"
           wake_on_modem: "on"
           wake_on_lan: "on"
+          powerbutton_sleep: false
       roles:
         - { role: feffi.macos-standby }
 ```
@@ -115,6 +119,7 @@ Or with local parameters:
               sleep_computer: "Never",
               sleep_harddisk: "Never",
               wake_on_modem: "on",
-              wake_on_lan: "on"
+              wake_on_lan: "on",
+              powerbutton_sleep: false
           }
 ```

@@ -47,3 +47,6 @@ macos_standby:
 
   # Set wake on network access to either <on> or <off>
   wake_on_lan: "on"
+
+  # Sleep on pressing the power button, direct sleep = true, show dialog = false
+  powerbutton_sleep: false
