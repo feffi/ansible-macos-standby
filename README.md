@@ -117,4 +117,5 @@ Or with local parameters:
               wake_on_lan: "on",
               powerbutton_sleep: false
           }
+        }
 ```
