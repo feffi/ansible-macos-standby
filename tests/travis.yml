@@ -14,7 +14,13 @@
       sleep_display: "Never"
       sleep_computer: "Never"
       sleep_harddisk: "Never"
-      wake_on_lan: "on"
+      wake_on_lan: true
       powerbutton_sleep: false
+      powernap: true
+      lidwake: true
+      acwake: false
+      halfdim: true
+      ttyskeepawake: true
+      destroyfvkeyonstandby: false
   roles:
     - { role: ansible-macos-standby }

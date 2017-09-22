@@ -67,10 +67,32 @@ macos_standby:
   sleep_harddisk: "Never"
 
   # Set wake on network access to either <on> or <off>
-  wake_on_lan: "on"
+  wake_on_lan: true
 
   # Sleep on pressing the power button, direct sleep = true, show dialog = false
   powerbutton_sleep: false
+
+  # Set usage of PowerNap
+  powernap: true
+
+  # wake the machine when the laptop lid (or clamshell) is opened
+  lidwake: true
+
+  # wake the machine when power source (AC/battery) is changed
+  acwake: false
+
+
+  # display sleep will use an intermediate half-brightness state between full brightness and fully off
+  halfdim: true
+
+  # prevent idle system sleep when any tty (e.g. remote login session) is 'active'. A tty is 'inactive'
+  # only when its idle time exceeds the system sleep timer.
+  ttyskeepawake: true
+
+  # Destroy File Vault Key when going to standby mode. By default File vault keys are retained even
+  # when system goes to standby. If the keys are destroyed, user will be prompted to enter the
+  # password while coming out of standby mode.
+  destroyfvkeyonstandby: false
 ```
 
 ## Dependencies
@@ -92,8 +114,14 @@ None.
           sleep_display: "Never"
           sleep_computer: "Never"
           sleep_harddisk: "Never"
-          wake_on_lan: "on"
+          wake_on_lan: true
           powerbutton_sleep: false
+          powernap: true
+          lidwake: true
+          acwake: false
+          halfdim: true
+          ttyskeepawake: true
+          destroyfvkeyonstandby: false
       roles:
         - { role: feffi.macos-standby }
 ```
@@ -114,8 +142,14 @@ Or with local parameters:
               sleep_display: "Never",
               sleep_computer: "Never",
               sleep_harddisk: "Never",
-              wake_on_lan: "on",
-              powerbutton_sleep: false
+              wake_on_lan: true,
+              powerbutton_sleep: false,
+              powernap: true,
+              lidwake: true,
+              acwake: false,
+              halfdim: true,
+              ttyskeepawake: true,
+              destroyfvkeyonstandby: false
           }
         }
 ```

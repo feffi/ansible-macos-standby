@@ -48,8 +48,31 @@
 
 - name: "Set wake-on-lan"
   become: yes
-  command: "systemsetup --setwakeonnetworkaccess {{ macos_standby.wake_on_lan }}"
-  when: macos_standby.wake_on_lan in [ "on", "off" ]
+  command: "systemsetup --setwakeonnetworkaccess {{ macos_standby.wake_on_lan | ternary("on","off") }}"
+
+- name: "Set powernap mode to {{ macos_standby.powernap }}"
+  become: true
+  command: "pmset -a powernap {{ macos_standby.powernap | ternary(1,0) }}"
+
+- name: "Set lidwake mode to {{ macos_standby.lidwake }}"
+  become: true
+  command: "pmset -a lidwake {{ macos_standby.lidwake | ternary(1,0) }}"
+
+- name: "Set acwake mode to {{ macos_standby.acwake }}"
+  become: true
+  command: "pmset -a lidwake {{ macos_standby.acwake | ternary(1,0) }}"
+
+- name: "Set halfdim mode to {{ macos_standby.halfdim }}"
+  become: true
+  command: "pmset -a lidwake {{ macos_standby.halfdim | ternary(1,0) }}"
+
+- name: "Set ttyskeepawake mode to {{ macos_standby.ttyskeepawake }}"
+  become: true
+  command: "pmset -a ttyskeepawake {{ macos_standby.ttyskeepawake | ternary(1,0) }}"
+
+- name: "Set destroyfvkeyonstandby mode to {{ macos_standby.destroyfvkeyonstandby }}"
+  become: true
+  command: "pmset -a destroyfvkeyonstandby {{ macos_standby.destroyfvkeyonstandby | ternary(1,0) }}"
 
 - name: Set macOS defaults
   include_role:

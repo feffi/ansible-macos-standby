@@ -47,3 +47,25 @@ macos_standby:
 
   # Sleep on pressing the power button, direct sleep = true, show dialog = false
   powerbutton_sleep: false
+
+  # Set usage of PowerNap
+  powernap: true
+
+  # wake the machine when the laptop lid (or clamshell) is opened
+  lidwake: true
+
+  # wake the machine when power source (AC/battery) is changed
+  acwake: false
+
+
+  # display sleep will use an intermediate half-brightness state between full brightness and fully off
+  halfdim: true
+
+  # prevent idle system sleep when any tty (e.g. remote login session) is 'active'. A tty is 'inactive'
+  # only when its idle time exceeds the system sleep timer.
+  ttyskeepawake: true
+
+  # Destroy File Vault Key when going to standby mode. By default File vault keys are retained even
+  # when system goes to standby. If the keys are destroyed, user will be prompted to enter the
+  # password while coming out of standby mode.
+  destroyfvkeyonstandby: false
