@@ -48,7 +48,7 @@
 
 - name: "Set wake-on-lan"
   become: yes
-  command: "systemsetup --setwakeonnetworkaccess {{ macos_standby.wake_on_lan | ternary("on","off") }}"
+  command: "systemsetup --setwakeonnetworkaccess {{ macos_standby.wake_on_lan | ternary('on','off') }}"
 
 - name: "Set powernap mode to {{ macos_standby.powernap }}"
   become: true
