@@ -1,23 +1,142 @@
 ---
-- name: "Set standby delay to {{ macos_standby.standby_delay }} seconds."
+#- name: Get hosts UUID from IOReg
+#  shell: "$(which ioreg) -rd1 -c IOPlatformExpertDevice | $(which awk) '/IOPlatformUUID/ && gsub(\"\\\"\", \"\") { print $3 }'"
+#  register: macos_standby_ioreg_result
+#  changed_when: false
+#  failed_when: not macos_standby_ioreg_result.stdout or macos_standby_ioreg_result.stderr or macos_standby_ioreg_result.rc != 0
+
+- name: Get pmset capabilities
+  shell: "pmset -g cap"
+  register: pmset_cap
+  changed_when: false
+
+- name: "Get old display sleep delay"
+  become: true
+  shell: "systemsetup -getdisplaysleep | awk -F ': ' '{print $2}'"
+  when: macos_standby.sleep_display
+  register: getcdisplaysleep_old
+  changed_when: false
+
+- name: "Set display sleep time to {{ macos_standby.sleep_display }}"
+  become: yes
+  command: "systemsetup -setdisplaysleep {{ macos_standby.sleep_display }}"
+  when: macos_standby.sleep_display and ( getcdisplaysleep_old.stdout | string ) != ( macos_standby.sleep_display | string )
+
+- name: "Get old computer sleep delay"
+  become: true
+  shell: "systemsetup -getcomputersleep | awk -F ': ' '{print $2}'"
+  when: macos_standby.sleep_computer
+  register: getcomputersleep_old
+  changed_when: false
+
+- name: "Set computer sleep time to {{ macos_standby.sleep_computer }}"
+  become: yes
+  command: "systemsetup -setcomputersleep {{ macos_standby.sleep_computer }}"
+  when: macos_standby.sleep_computer and ( getcomputersleep_old.stdout | string ) != ( macos_standby.sleep_computer | string )
+
+- name: "Get old harddisk sleep delay"
+  become: true
+  shell: "systemsetup -getharddisksleep | awk -F ': ' '{print $2}'"
+  when: macos_standby.sleep_harddisk
+  register: getharddisksleep_old
+  changed_when: false
+
+- name: "Set harddisk sleep time to {{ macos_standby.sleep_harddisk }}"
+  become: yes
+  command: "systemsetup -setharddisksleep {{ macos_standby.sleep_harddisk }}"
+  when: macos_standby.sleep_harddisk and ( getharddisksleep_old.stdout | string ) != ( macos_standby.sleep_harddisk | string )
+
+- name: "Get old wake-on-lan status"
+  become: true
+  shell: "systemsetup -getwakeonnetworkaccess | awk -F ': ' '{print $2}'"
+  when: macos_standby.wake_on_lan
+  register: wol_old
+  changed_when: false
+
+- name: "Set wake-on-lan"
+  become: yes
+  command: "systemsetup --setwakeonnetworkaccess {{ macos_standby.wake_on_lan | ternary('on','off') }}"
+  when: macos_standby.wake_on_lan and (wol_old.stdout | lower) != (macos_standby.wake_on_lan | ternary('on','off') )
+
+- name: Get old pmset 'powernap' value
+  shell: "pmset -g | grep \"^\\s*powernap.*\" | awk -F \" \" '{ print $2 }'"
+  register: pmset_old
+  changed_when: false
+
+- name: "Set powernap mode to {{ macos_standby.powernap }}"
+  become: true
+  command: "pmset -a powernap {{ macos_standby.powernap | ternary(1,0) }}"
+  when: "macos_standby.powernap and ( pmset_old.stdout | string ) != ( macos_standby.powernap | ternary(1,0) | string ) and 'powernap' in pmset_cap.stdout"
+
+- name: Get old pmset 'lidwake' value
+  shell: "pmset -g | grep \"^\\s*lidwake.*\" | awk -F \" \" '{ print $2 }'"
+  register: pmset_old
+  changed_when: false
+
+- name: "Set lidwake mode to {{ macos_standby.lidwake }}"
+  become: true
+  command: "pmset -a lidwake {{ macos_standby.lidwake | ternary(1,0) }}"
+  when: "macos_standby.lidwake and ( pmset_old.stdout | string ) != ( macos_standby.lidwake | ternary(1,0) | string ) and 'lidwake' in pmset_cap.stdout"
+
+- name: Get old pmset 'acwake' value
+  shell: "pmset -g | grep \"^\\s*acwake.*\" | awk -F \" \" '{ print $2 }'"
+  register: pmset_old
+  changed_when: false
+
+- name: "Set acwake mode to {{ macos_standby.acwake }}"
+  become: true
+  command: "pmset -a acwake {{ macos_standby.acwake | ternary(1,0) }}"
+  when: "macos_standby.acwake and (pmset_old.stdout | string ) != ( macos_standby.acwake | ternary(1,0) | string ) and 'acwake' in pmset_cap.stdout"
+
+- name: Get old pmset 'halfdim' value
+  shell: "pmset -g | grep \"^\\s*halfdim.*\" | awk -F \" \" '{ print $2 }'"
+  register: pmset_old
+  changed_when: false
+
+- name: "Set halfdim mode to {{ macos_standby.halfdim }}"
+  become: true
+  command: "pmset -a halfdim {{ macos_standby.halfdim | ternary(1,0) }}"
+  when: "macos_standby.halfdim and ( pmset_old.stdout | string ) != ( macos_standby.halfdim | ternary(1,0) | string ) and 'halfdim' in pmset_cap.stdout"
+
+- name: Get old pmset 'ttyskeepawake' value
+  shell: "pmset -g | grep \"^\\s*ttyskeepawake.*\" | awk -F \" \" '{ print $2 }'"
+  register: pmset_old
+  changed_when: false
+
+- name: "Set ttyskeepawake mode to {{ macos_standby.ttyskeepawake }}"
+  become: true
+  command: "pmset -a ttyskeepawake {{ macos_standby.ttyskeepawake | ternary(1,0) }}"
+  when: "macos_standby.ttyskeepawake and ( pmset_old.stdout | string ) != ( macos_standby.ttyskeepawake | ternary(1,0) | string ) and 'ttyskeepawake' in pmset_cap.stdout"
+
+- name: Get old pmset 'destroyfvkeyonstandby' value
+  shell: "pmset -g | grep \"^\\s*destroyfvkeyonstandby.*\" | awk -F \" \" '{ print $2 }'"
+  register: pmset_old
+  changed_when: false
+
+- name: "Set destroyfvkeyonstandby mode to {{ macos_standby.destroyfvkeyonstandby }}"
+  become: true
+  command: "pmset -a destroyfvkeyonstandby {{ macos_standby.destroyfvkeyonstandby | ternary(1,0) }}"
+  when: "macos_standby.destroyfvkeyonstandby and ( pmset_old.stdout | string ) != ( macos_standby.destroyfvkeyonstandby | ternary(1,0) | string ) and 'destroyfvkeyonstandby' in pmset_cap.stdout"
+
+- name: Get old pmset 'standbydelay' value
+  shell: "pmset -g | grep \"^\\s*standbydelay.*\" | awk -F \" \" '{ print $2 }'"
+  register: pmset_old
+  changed_when: false
+
+- name: "Set standbydelay mode to {{ macos_standby.standby_delay }}"
   become: true
   command: "pmset -a standbydelay {{ macos_standby.standby_delay }}"
-  when: not macos_standby.standby_delay
+  when: "macos_standby.standby_delay and (pmset_old.stdout | string ) != (macos_standby.standby_delay | string ) and 'standbydelay' in pmset_cap.stdout"
 
-- name: "Set deep sleep delay to {{ macos_standby.sleep_delay }}"
-  become: true
-  command: "systemsetup -setcomputersleep {{ macos_standby.sleep_delay }} > /dev/null"
-  when: macos_standby.sleep_delay
+- name: Get old pmset 'hibernation' value
+  shell: "pmset -g | grep \"^\\s*hibernatemode.*\" | awk -F \" \" '{ print $2 }'"
+  register: pmset_old
+  changed_when: false
 
 - name: "Set hibernation mode to {{ macos_standby.hibernate_mode }}"
   become: true
   command: "pmset -a hibernatemode {{ macos_standby.hibernate_mode }}"
-  when: macos_standby.hibernate_mode in [0, 3, 25]
-
-- name: "Unsupported hibernation mode {{ macos_standby.hibernate_mode }}, must be 0, 3, 25"
-  debug:
-    msg: "Unsupported hibernation mode {{ macos_standby.hibernate_mode }}, must be 0, 3, 25"
-  when: macos_standby.hibernate_mode not in [0, 3, 25]
+  when: "macos_standby.hibernate_mode in [0, 3, 25] and (pmset_old.stdout | string ) != ( macos_standby.hibernate_mode | string ) and 'hibernatemode' in pmset_cap.stdout"
 
 - name: "Remove the sleep image file to save disk space"
   become: true
@@ -33,46 +152,6 @@
   become: true
   command: "chflags uchg /private/var/vm/sleepimage"
   when: macos_standby.remove_sleepimage
-
-- name: "Set display sleep time to {{ macos_standby.sleep_display }}"
-  become: yes
-  command: "systemsetup -setdisplaysleep {{ macos_standby.sleep_display }}"
-
-- name: "Set computer sleep time to {{ macos_standby.sleep_computer }}"
-  become: yes
-  command: "systemsetup -setcomputersleep {{ macos_standby.sleep_computer }}"
-
-- name: "Set harddisk sleep time to {{ macos_standby.sleep_harddisk }}"
-  become: yes
-  command: "systemsetup -setharddisksleep {{ macos_standby.sleep_harddisk }}"
-
-- name: "Set wake-on-lan"
-  become: yes
-  command: "systemsetup --setwakeonnetworkaccess {{ macos_standby.wake_on_lan | ternary('on','off') }}"
-
-- name: "Set powernap mode to {{ macos_standby.powernap }}"
-  become: true
-  command: "pmset -a powernap {{ macos_standby.powernap | ternary(1,0) }}"
-
-- name: "Set lidwake mode to {{ macos_standby.lidwake }}"
-  become: true
-  command: "pmset -a lidwake {{ macos_standby.lidwake | ternary(1,0) }}"
-
-- name: "Set acwake mode to {{ macos_standby.acwake }}"
-  become: true
-  command: "pmset -a lidwake {{ macos_standby.acwake | ternary(1,0) }}"
-
-- name: "Set halfdim mode to {{ macos_standby.halfdim }}"
-  become: true
-  command: "pmset -a lidwake {{ macos_standby.halfdim | ternary(1,0) }}"
-
-- name: "Set ttyskeepawake mode to {{ macos_standby.ttyskeepawake }}"
-  become: true
-  command: "pmset -a ttyskeepawake {{ macos_standby.ttyskeepawake | ternary(1,0) }}"
-
-- name: "Set destroyfvkeyonstandby mode to {{ macos_standby.destroyfvkeyonstandby }}"
-  become: true
-  command: "pmset -a destroyfvkeyonstandby {{ macos_standby.destroyfvkeyonstandby | ternary(1,0) }}"
 
 - name: Set macOS defaults
   include_role:

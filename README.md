@@ -27,9 +27,6 @@ macos_standby:
   # Set standby delay in seconds, default = 3600, 24 hours = 86400, disabled = false
   standby_delay: 86400
 
-  # Never go into computer sleep mode
-  sleep_delay: "Never"
-
   # Set hibernate mode:
   # hibernatemode = 0 (binary 0000) by default on supported desktops. The system will not back memory up to
   #   persistent storage. The system must wake from the contents of memory; the system will lose context on
@@ -105,7 +102,6 @@ None.
       vars:
         macos_standby:
           standby_delay: 86400
-          sleep_delay: "Never"
           hibernate_mode: 0
           remove_sleepimage: false
           bezel_dim: true
@@ -133,7 +129,6 @@ Or with local parameters:
         - { role: feffi.macos-standby,
             macos_standby: {
               standby_delay: 86400,
-              sleep_delay: "Never",
               hibernate_mode: 0,
               remove_sleepimage: false,
               bezel_dim: true,
