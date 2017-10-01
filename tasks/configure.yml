@@ -10,6 +10,18 @@
   register: pmset_cap
   changed_when: false
 
+- name: "Get old restart-on-freeze status"
+  become: true
+  shell: "systemsetup -getrestartfreeze | awk -F ': ' '{print $2}'"
+  when: macos_standby.restart_on_freeze
+  register: getrestartfreeze_old
+  changed_when: false
+
+- name: "Set restart-on-freeze"
+  become: yes
+  command: "systemsetup --setrestartfreeze {{ macos_standby.restart_on_freeze | ternary('on','off') }}"
+  when: macos_standby.restart_on_freeze and (getrestartfreeze_old.stdout | lower) != (macos_standby.restart_on_freeze | ternary('on','off') )
+
 - name: "Get old display sleep delay"
   become: true
   shell: "systemsetup -getdisplaysleep | awk -F ': ' '{print $2}'"

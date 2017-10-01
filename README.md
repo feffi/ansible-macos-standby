@@ -24,6 +24,9 @@ All role based variables are listed below, along with default values:
 ```yaml
 ---
 macos_standby:
+  # Restart automatically if the computer freezes
+  restart_on_freeze: true
+
   # Set standby delay in seconds, default = 3600, 24 hours = 86400, disabled = false
   standby_delay: 86400
 
@@ -101,6 +104,7 @@ None.
     - hosts: all
       vars:
         macos_standby:
+          restart_on_freeze: true
           standby_delay: 86400
           hibernate_mode: 0
           remove_sleepimage: false
@@ -128,6 +132,7 @@ Or with local parameters:
       roles:
         - { role: feffi.macos-standby,
             macos_standby: {
+              restart_on_freeze: true,
               standby_delay: 86400,
               hibernate_mode: 0,
               remove_sleepimage: false,

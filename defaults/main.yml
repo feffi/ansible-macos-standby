@@ -1,5 +1,8 @@
 ---
 macos_standby:
+  # Restart automatically if the computer freezes
+  restart_on_freeze: true
+
   # Set standby delay in seconds, default = 3600, 24 hours = 86400, disabled = false
   standby_delay: 86400
 

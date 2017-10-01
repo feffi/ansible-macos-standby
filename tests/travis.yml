@@ -4,6 +4,7 @@
   vars:
     DEBUG: true
     macos_standby:
+      restart_on_freeze: true
       standby_delay: 86400
       hibernate_mode: 0
       remove_sleepimage: false
